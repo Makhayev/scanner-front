@@ -1,8 +1,8 @@
 // import logo from './logo.svg';
 // import './App.css';
-import {Container, Row, Col, ListGroup, Button, InputGroup, FormControl, Alert, AlertProps} from 'react-bootstrap'
+import {Container, Row, Col, ListGroup, Button, InputGroup, FormControl, Modal, Form} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import React from 'react'
 import ReactDOM from 'react-dom'
 function App() {
@@ -13,7 +13,16 @@ function App() {
   const [Name, setName] = useState('Whatever')
   const [objs, setobjs] = useState([])
  
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const inputIdRef = useRef()
+  const inputNameRef = useRef()
+  const inputCountRef = useRef()
+  const inputBuyPriceRef = useRef()
+  const inputSellPriceRef = useRef()
 
   useEffect(() => {
     window.addEventListener('keyup', keypress)
@@ -224,25 +233,81 @@ function App() {
 
   let refresh = () => {
     console.log('refresh invoked')
-    function refresh() {
+    // function refresh() {
       let options = {
           method: 'GET'
       }
 
       fetch('http://localhost/refresh', options)
       .then((res) => {
-          
+          console.log('refreshed ' + res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
+  // }
+  }
+
+  let addNewItem = () => {
+    console.log('add new item invoked')
+    setShow(false)
+    
+    let toSend = {
+      id: inputIdRef.current.value,
+      Name: inputNameRef.current.value,
+      count: inputCountRef.current.value,
+      buy: inputBuyPriceRef.current.value,
+      sell: inputSellPriceRef.current.value
+    }
+
+    let options = {
+      method: 'POST',
+      body: JSON.stringify(toSend),
+      headers: {
+        'content-type': 'application/json'
+      }
+    }
+
+
+    fetch('http://localhost/addNewItem', options)
+    .then(res => {
+      console.log('added new item ' + res)
+    })
+    .catch(err => {
+      console.log(err)
     })
 
   }
-  }
-
-  // let newIte
 
 
   return (
+
+    
     
       <Container>
+        <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title> Adding new item...</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Control ref = {inputIdRef} type="text" placeholder="Enter id" />
+        <br />
+        <Form.Control ref = {inputNameRef} type="text" placeholder="Enter Name" />
+        <br />
+        <Form.Control ref = {inputCountRef} type="text" placeholder="Enter count" />
+        <br />
+        <Form.Control ref = {inputBuyPriceRef} type="text" placeholder="Enter buying price" />
+        <br />
+        <Form.Control ref = {inputSellPriceRef} type="text" placeholder="Enter selling price" />
+        </Modal.Body>
+        <Modal.Footer>
+          
+          <Button variant="primary" onClick={addNewItem}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
         <Row>
           <Col> 
             <InputGroup className="mt-5 mb-5">
@@ -251,7 +316,7 @@ function App() {
               </InputGroup.Prepend> */}
               <FormControl
                 id = "form"
-                placeholder="Username"
+                placeholder="Item ID"
                 aria-label="Username"
                 aria-describedby="basic-addon1"
                 onChange = {
@@ -265,11 +330,11 @@ function App() {
               />
             </InputGroup>
 
-            <Container className = "mt-5 mb-5 ">
+            <Container className = "mt-5 mb-5 h1">
               {Name}
             </Container>
 
-            <Container className = "mt-5 mb-5">
+            <Container className = "mt-5 mb-5 h1">
               {Money}
             </Container>
             <Button className = "mt-3 mb-3 w-50" onClick = {pay}>
@@ -289,6 +354,9 @@ function App() {
               Refresh
             </Button>
             <br />
+            <Button className = "mt-3 mb-3 w-50" onClick = {handleShow}>
+              Add new Item
+            </Button>
           </Col>
           <Col>
           
