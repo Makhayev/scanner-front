@@ -126,9 +126,9 @@ function App() {
 
     for (const iter of objs) { 
       if (iter.id == e.target.parentElement.id) {
-        let ind = objs.indexOf(iter)
         
-        for (let i = 0; i < Number(a); i++) {
+        
+        for (let i = 0; i < Number(a) - 1; i++) {
           objs.push(iter)
          
         }
@@ -138,7 +138,7 @@ function App() {
         })
         ReactDOM.render(temp, document.getElementById('listik'))
 
-        setMoney(Money => Money + iter.sell * Number(a))
+        setMoney(Money => Money + iter.sell * Number(a) - iter.sell)
         console.log(objs)
         break
       }
@@ -199,7 +199,7 @@ function App() {
           }
       }
 
-      fetch('http://localhost/pay', options)
+      fetch('http://localhost/add', options)
       .then((response) => {
                 
       })
