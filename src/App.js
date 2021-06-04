@@ -34,6 +34,16 @@ function App() {
 
   let keypress = (e) => {
 
+    for (let tempVar = 0; tempVar < 10; tempVar++) {
+      if (e.key == String(tempVar)) {
+        console.log('number press')
+        let tempidd = document.getElementById('form').value
+        tempidd = String(tempidd) + String(tempVar)
+        document.getElementById('form').value = tempidd
+        break
+      }
+    }
+
     if (e.key == 'Enter') {
       console.log('keyup')
       id = document.getElementById('form').value
@@ -78,7 +88,7 @@ function App() {
         
         ReactDOM.render(temp, document.getElementById('listik'))
       })
-    }
+    } 
   }
   
 
@@ -328,6 +338,7 @@ function App() {
                   }
                 }
               />
+              
             </InputGroup>
 
             <Container className = "mt-5 mb-5 h1">
