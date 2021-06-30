@@ -100,7 +100,7 @@ function App() {
     var sendArr = []
 
       for (var j of objs) {
-        sendArr.push(j.id)
+        sendArr.push(Number(j.id))
       }
       console.log(sendArr)
       var options = {
@@ -297,6 +297,34 @@ function App() {
   }
 
   let searchByName = () => {
+    let searching = document.getElementById('nameSearch').value
+    document.getElementById('nameSearch').value = ''
+    let toSend = {
+      search: searching,
+    }
+    let options = {
+      method: 'POST',
+      body: JSON.stringify(toSend),
+      headers: {
+        'content-type': 'application/json'
+      }
+    }
+    console.log(toSend)
+    fetch('http://localhost/searchByName', options)
+    .then( res => { return res.json()})
+    .then(res => {
+      console.log(res)
+      for (let i of res) {
+        objs.push(i)
+        setMoney( (money) => money + Number(i.sell))
+      }
+      console.log(objs)
+      let temp =  objs.map((item) => {
+        return React.createElement('b', {id: item.id}, item.Name + ' ' + item.buy + '/' + item.sell, React.createElement('button', {className: 'btn btn-primary m-1', onClick: (e) => {clear2(e)}}, 'x'), React.createElement('button', {className: 'btn btn-secondary m-1', onClick: (e) => {multiply(e)}}, '*'))
+      })
+      ReactDOM.render(temp, document.getElementById('listik'))
+    })
+
 
   }
 
@@ -359,32 +387,49 @@ function App() {
             <Container className = "mt-5 mb-5 h1">
               {Money}
             </Container>
-            <Button className = "mt-3 mb-3 w-50" onClick = {pay}>
-              Pay
-            </Button>
-            <br />
-            <Button className = "mt-3 mb-3 w-50" onClick = {add}>
-              Add Item
+            <Row>
+              <Col xs = {6}>
+              <Button className = "mt-3 mb-3 w-100" onClick = {pay}>
+                Pay
+              </Button>
+              <br />
+              <Button className = "mt-3 mb-3 w-100" onClick = {add}>
+                Add Item
+              
+              </Button>
+              <br />
+              
+              <InputGroup className = "mt-3 mb-3 w-100">
+                <FormControl id = 'nameSearch' placeholder = 'search by name' >
 
-            </Button>
-            <br />
-            <Button className = "mt-3 mb-3 w-50" onClick = {report}>
-              Report
-            </Button>
-            <br />
-            <Button className = "mt-3 mb-3 w-50" onClick = {refresh}>
-              Refresh
-            </Button>
-            <br />
-            <Button className = "mt-3 mb-3 w-50" onClick = {handleShow}>
-              Add new Item
-            </Button>
-            <br />
+                </FormControl>
+              </InputGroup>
+              
+              <Button className = "mt-3 mb-3 w-100" onClick = {searchByName}>
+                  Search by name
+                </Button>
+              <br />
+              
+              </Col>
+              <Col xs = {6}>
+              <Button className = "mt-3 mb-3 w-100" onClick = {report}>
+                Report
+              </Button>
+              <br />
+              <Button className = "mt-3 mb-3 w-100" onClick = {refresh}>
+                Refresh
+              </Button>
+              <br />
+              <Button className = "mt-3 mb-3 w-100" onClick = {handleShow}>
+                  Add new Item
+                </Button>
+                <br />
 
-            
-            <Button className = "mt-3 mb-3 w-50" onClick = {handleShow}>
-              Search by name
-            </Button>
+              </Col >
+             
+              
+             
+            </Row>
           </Col>
           <Col>
           
