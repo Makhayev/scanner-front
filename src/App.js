@@ -290,6 +290,16 @@ function App() {
 
   }
 
+  let xclear = () => {
+    console.log('X')
+    document.getElementById('form').value = ''
+
+  }
+
+  let searchByName = () => {
+
+  }
+
 
   return (
 
@@ -324,6 +334,7 @@ function App() {
               {/* <InputGroup.Prepend>
                 
               </InputGroup.Prepend> */}
+              <Button onClick = {xclear}>X</Button>
               <FormControl
                 id = "form"
                 placeholder="Item ID"
@@ -367,6 +378,12 @@ function App() {
             <br />
             <Button className = "mt-3 mb-3 w-50" onClick = {handleShow}>
               Add new Item
+            </Button>
+            <br />
+
+            
+            <Button className = "mt-3 mb-3 w-50" onClick = {handleShow}>
+              Search by name
             </Button>
           </Col>
           <Col>
