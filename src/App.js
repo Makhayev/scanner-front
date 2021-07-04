@@ -12,17 +12,24 @@ function App() {
   const [Money, setMoney] = useState(0)
   const [Name, setName] = useState('Whatever')
   const [objs, setobjs] = useState([])
- 
+  const [show2, setShow2] = useState(false)
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
+  const handleClose2 = () => setShow2(false)
   const handleShow = () => setShow(true);
-
+  const handleShow2 = () => setShow2(true)
   const inputIdRef = useRef()
   const inputNameRef = useRef()
   const inputCountRef = useRef()
   const inputBuyPriceRef = useRef()
   const inputSellPriceRef = useRef()
+
+  const inputIdRef2 = useRef()
+  const inputNameRef2 = useRef()
+  const inputCountRef2 = useRef()
+  const inputBuyPriceRef2 = useRef()
+  const inputSellPriceRef2 = useRef()
 
   useEffect(() => {
     window.addEventListener('keyup', keypress)
@@ -33,9 +40,10 @@ function App() {
   
 
   let keypress = (e) => {
-
+    
     for (let tempVar = 0; tempVar < 10; tempVar++) {
       if (e.key == String(tempVar)) {
+        
         console.log('number press')
         let tempidd = document.getElementById('form').value
         tempidd = String(tempidd) + String(tempVar)
@@ -328,6 +336,70 @@ function App() {
 
   }
 
+  let fetchItem = () => {
+
+    console.log('fetchItem invoked')
+
+    let tempId = inputIdRef2.current.value
+    console.log(tempId)
+    
+
+    let data = {
+      id: tempId,
+    }
+
+    var options = {
+      method: 'POST',
+      body: JSON.stringify(data),
+  
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    }
+    
+    fetch('http://localhost/see', options)
+    .then((response) => {
+    // console.log(response)
+    // let a = JSON.parse(response)
+    return response.json();
+    })
+
+    .then((jsonObject) => {
+      console.log(jsonObject)
+      inputNameRef2.current.value = jsonObject.Name
+      inputBuyPriceRef2.current.value = jsonObject.buy
+      inputCountRef2.current.value = jsonObject.count
+      inputSellPriceRef2.current.value = jsonObject.sell
+
+
+    })
+
+
+  }
+
+  let changeItem = () => {
+
+    
+    let toSend = {
+      id: inputIdRef2.current.value,
+      Name: inputNameRef2.current.value,
+      count: inputCountRef2.current.value,
+      buy: inputBuyPriceRef2.current.value,
+      sell: inputSellPriceRef2.current.value
+    }
+
+    let options = {
+      method: 'POST',
+      body: JSON.stringify(toSend),
+      headers: {
+        'content-type': 'application/json'
+      }
+    }
+
+    fetch('http://localhost/changeItem', options)
+    
+
+  }
 
   return (
 
@@ -352,6 +424,32 @@ function App() {
         <Modal.Footer>
           
           <Button variant="primary" onClick={addNewItem}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={show2} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title> Changing an Item</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <Form.Control ref = {inputIdRef2} type="text" placeholder="id" />
+        <br />
+        <Form.Control ref = {inputNameRef2} type="text" placeholder="Name" />
+        <br />
+        <Form.Control ref = {inputCountRef2} type="text" placeholder="count" />
+        <br />
+        <Form.Control ref = {inputBuyPriceRef2} type="text" placeholder="buying price" />
+        <br />
+        <Form.Control ref = {inputSellPriceRef2} type="text" placeholder="selling price" />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant = "primary" onClick = {fetchItem}>
+            Search for an item
+          </Button>
+          
+          <Button variant="primary" onClick={changeItem}>
             Submit
           </Button>
         </Modal.Footer>
@@ -424,7 +522,9 @@ function App() {
                   Add new Item
                 </Button>
                 <br />
-
+              <Button className = "mt-3 mb-3 w-100" onClick = {handleShow2}>
+                Change an Item
+              </Button>
               </Col >
              
               
