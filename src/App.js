@@ -14,7 +14,8 @@ function App() {
   const [objs, setobjs] = useState([])
   const [show2, setShow2] = useState(false)
   const [show, setShow] = useState(false);
-
+  const showRef = useRef(show)
+  const show2Ref = useRef(show2)
   const handleClose = () => setShow(false);
   const handleClose2 = () => setShow2(false)
   const handleShow = () => setShow(true);
@@ -33,13 +34,18 @@ function App() {
 
   useEffect(() => {
     window.addEventListener('keyup', keypress)
+    showRef.current = show
+    show2Ref.current = show2
     return () => {
       window.removeEventListener('keyup', keypress)
     }
-  }, [])
+  }, [show, show2])
   
 
   let keypress = (e) => {
+    console.log(showRef.current)
+
+    if (showRef.current || show2Ref.current) return
     
     for (let tempVar = 0; tempVar < 10; tempVar++) {
       if (e.key == String(tempVar)) {
@@ -100,7 +106,7 @@ function App() {
   }
   
 
-  let pay = () => {
+  let pay = (e) => {
     console.log('pay invoked')
 
     console.log(objs)
@@ -132,7 +138,8 @@ function App() {
     
       ReactDOM.unmountComponentAtNode(document.getElementById('listik'))
 
-
+      // document.getElementById('listik').focus()
+      e.target.blur()
 
   }
 
@@ -196,7 +203,7 @@ function App() {
     ReactDOM.render(temp, document.getElementById('listik'))
   }
 
-  let add = () => {
+  let add = (e) => {
     console.log('add invoked')
     // console.log('pay invoked')
 
@@ -229,10 +236,10 @@ function App() {
       // document.getElementById('listik').innerHTML = ''
     
       ReactDOM.unmountComponentAtNode(document.getElementById('listik'))
-      
-  }
+      e.target.blur()
+  } 
 
-  let report = () => {
+  let report = (e) => {
     console.log('report invoked')
     let options = {
       method: 'GET'
@@ -247,9 +254,10 @@ function App() {
         console.log(rep)
         alert("Продано за сегодня: " + rep.todaysell + "\nПрофит за сегодня: " + (rep.todaysell - rep.todaybuy) + "\nПродано за все время: " + (rep.alltimesell) + "\nПрофит за все время: "  + (rep.alltimesell - rep.alltimebuy))
     })
+    e.target.blur()
   }
 
-  let refresh = () => {
+  let refresh = (e) => {
     console.log('refresh invoked')
     // function refresh() {
       let options = {
@@ -265,9 +273,10 @@ function App() {
     })
 
   // }
+    e.target.blur()
   }
 
-  let addNewItem = () => {
+  let addNewItem = (e) => {
     console.log('add new item invoked')
     setShow(false)
     
@@ -295,16 +304,16 @@ function App() {
     .catch(err => {
       console.log(err)
     })
-
+    e.target.blur()
   }
 
-  let xclear = () => {
+  let xclear = (e) => {
     console.log('X')
     document.getElementById('form').value = ''
 
   }
 
-  let searchByName = () => {
+  let searchByName = (e) => {
     let searching = document.getElementById('nameSearch').value
     document.getElementById('nameSearch').value = ''
     let toSend = {
@@ -322,18 +331,24 @@ function App() {
     .then( res => { return res.json()})
     .then(res => {
       console.log(res)
-      for (let i of res) {
-        objs.push(i)
-        setMoney( (money) => money + Number(i.sell))
-      }
-      console.log(objs)
-      let temp =  objs.map((item) => {
-        return React.createElement('b', {id: item.id}, item.Name + ' ' + item.buy + '/' + item.sell, React.createElement('button', {className: 'btn btn-primary m-1', onClick: (e) => {clear2(e)}}, 'x'), React.createElement('button', {className: 'btn btn-secondary m-1', onClick: (e) => {multiply(e)}}, '*'))
+      let stringy = '' 
+      res.map((item) => {
+        stringy = stringy + item.Name + ' ' + item.id + '\n'
       })
-      ReactDOM.render(temp, document.getElementById('listik'))
+      console.log(stringy)
+      alert(stringy)
+      // for (let i of res) {
+      //   objs.push(i)
+      //   setMoney( (money) => money + Number(i.sell))
+      // }
+      // console.log(objs)
+      // let temp =  objs.map((item) => {
+      //   return React.createElement('b', {id: item.id}, item.Name + ' ' + item.buy + '/' + item.sell, React.createElement('button', {className: 'btn btn-primary m-1', onClick: (e) => {clear2(e)}}, 'x'), React.createElement('button', {className: 'btn btn-secondary m-1', onClick: (e) => {multiply(e)}}, '*'))
+      // })
+      // ReactDOM.render(temp, document.getElementById('listik'))
     })
 
-
+    e.target.blur()
   }
 
   let fetchItem = () => {
@@ -377,7 +392,7 @@ function App() {
 
   }
 
-  let changeItem = () => {
+  let changeItem = (e) => {
 
     
     let toSend = {
@@ -398,7 +413,7 @@ function App() {
 
     fetch('http://localhost/changeItem', options)
     
-
+    e.target.blur()
   }
 
   return (
