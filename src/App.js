@@ -310,7 +310,7 @@ function App() {
   let xclear = (e) => {
     console.log('X')
     document.getElementById('form').value = ''
-
+    e.target.blur()
   }
 
   let searchByName = (e) => {
