@@ -16,15 +16,25 @@ function App() {
   const [show, setShow] = useState(false);
   const showRef = useRef(show)
   const show2Ref = useRef(show2)
-  const handleClose = () => setShow(false);
+  const handleClose = () => setShow(false)
   const handleClose2 = () => setShow2(false)
-  const handleShow = () => setShow(true);
+  const handleShow = () => setShow(true)
+  
+    
+  
   const handleShow2 = () => setShow2(true)
+    
+    
+  
+  
   const inputIdRef = useRef()
   const inputNameRef = useRef()
   const inputCountRef = useRef()
   const inputBuyPriceRef = useRef()
   const inputSellPriceRef = useRef()
+
+  const changeAnItemRef = useRef()
+  const addNewItemRef = useRef()
 
   const inputIdRef2 = useRef()
   const inputNameRef2 = useRef()
@@ -278,6 +288,8 @@ function App() {
 
   let addNewItem = (e) => {
     console.log('add new item invoked')
+
+
     setShow(false)
     
     let toSend = {
@@ -305,7 +317,8 @@ function App() {
       console.log(err)
     })
     e.target.blur()
-  }
+
+    }
 
   let xclear = (e) => {
     console.log('X')
@@ -414,14 +427,19 @@ function App() {
     fetch('http://localhost/changeItem', options)
     
     e.target.blur()
+
+    setShow2(false);
+
+    // 
   }
 
+  
   return (
 
     
     
       <Container>
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose} restoreFocus = {false}>
         <Modal.Header closeButton>
           <Modal.Title> Adding new item...</Modal.Title>
         </Modal.Header>
@@ -444,7 +462,7 @@ function App() {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={show2} onHide={handleClose2}>
+      <Modal show={show2} onHide={handleClose2} restoreFocus = {false}>
         <Modal.Header closeButton>
           <Modal.Title> Changing an Item</Modal.Title>
         </Modal.Header>
@@ -533,11 +551,11 @@ function App() {
                 Refresh
               </Button>
               <br />
-              <Button className = "mt-3 mb-3 w-100" onClick = {handleShow}>
+              <Button className = "mt-3 mb-3 w-100" ref = {addNewItemRef} onClick = {handleShow}>
                   Add new Item
                 </Button>
                 <br />
-              <Button className = "mt-3 mb-3 w-100" onClick = {handleShow2}>
+              <Button className = "mt-3 mb-3 w-100" ref = {changeAnItemRef} onClick = {handleShow2}>
                 Change an Item
               </Button>
               </Col >
