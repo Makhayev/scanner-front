@@ -18,15 +18,19 @@ function App() {
   const show2Ref = useRef(show2)
   const handleClose = () => setShow(false)
   const handleClose2 = () => setShow2(false)
-  const handleShow = () => setShow(true)
+  const handleShow = () => {setShow(true)
   
+    setTimeout(() => {
+      inputIdRef.current.focus()
+    }, 1)
+  };
+  const handleShow2 = () => {setShow2(true)
     
+    setTimeout(() => {
+      inputIdRef2.current.focus()
+    }, 1)
   
-  const handleShow2 = () => setShow2(true)
-    
-    
-  
-  
+  }
   const inputIdRef = useRef()
   const inputNameRef = useRef()
   const inputCountRef = useRef()
