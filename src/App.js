@@ -48,10 +48,12 @@ function App() {
 
   useEffect(() => {
     window.addEventListener('keyup', keypress)
+    // window.addEventListener('keyup', )
     showRef.current = show
     show2Ref.current = show2
     return () => {
       window.removeEventListener('keyup', keypress)
+      // window.addEventListener('keyup', addNewItem)
     }
   }, [show, show2])
   
@@ -59,7 +61,17 @@ function App() {
   let keypress = (e) => {
     console.log(showRef.current)
 
-    if (showRef.current || show2Ref.current) return
+    // if (showRef.current || show2Ref.current) return
+
+    if (showRef.current && e.key == 'Enter') {
+      addNewItem(e)
+      return
+    }  else if (show2Ref.current && e.key == 'Enter') {
+      changeItem(e)
+      return
+    } else if (showRef.current || show2Ref.current) {
+      return
+    }
     
     for (let tempVar = 0; tempVar < 10; tempVar++) {
       if (e.key == String(tempVar)) {
@@ -292,6 +304,10 @@ function App() {
 
   let addNewItem = (e) => {
     console.log('add new item invoked')
+
+    // if (e.key != 'Enter') {
+    //   return
+    // }
 
 
     setShow(false)
